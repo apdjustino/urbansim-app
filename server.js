@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt-nodejs';
+import User from './src/server/user';
 import secrets from './src/server/secrets';
 
 
@@ -42,6 +43,39 @@ mongoose.connection.on("disconnected", connect);
 
 
 //api routes (client side routes are handled in react component App.js
+
+app.post('/api/login', (req, res, next) => {
+    const email = req.body.email;
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            bcrypt.compare(req.body.password, user.password, function(error, isMatch){
+                if(error){
+                    console.log(error);
+                    res.json({success: false});
+                }else{
+                    if(isMatch){
+                        const token = jwt.sign({email: email}, secrets.jwt_secret);
+                        res.json({success: true, token: token});
+                    }else{
+                        res.json({success: false});
+                    }
+
+                }
+            });
+        }
+    })
+});
+
+app.post('/api/authenticate', (req, res, next) => {
+    const token = req.body.token;
+    jwt.verify(token, secrets.jwt_secret, (err, decoded) => {
+        if(err){
+            res.json({authenticated: false});
+        }else{
+            res.json({authenticated: true})
+        }
+    })
+});
 
 //main server listening loop
 app.listen(3000, function(){

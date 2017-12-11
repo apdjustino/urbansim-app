@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {Router, Route} from 'react-router-dom';
 import {Provider} from 'react-redux'
 import history from './config/history';
+import Authenticated from './components/Authenticated'
 import HomePage from './views/HomePage';
+import PrivatePage from './views/PrivatePage';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -13,6 +15,7 @@ const App = ({store}) => (
         <Router history={history}>
             <div>
                 <Route exact path="/" component={HomePage} />
+                <Route exact path="/private" render={ props => (<Authenticated component={PrivatePage} {...props}/>)} />
             </div>
         </Router>
     </Provider>

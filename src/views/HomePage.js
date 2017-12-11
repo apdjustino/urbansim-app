@@ -6,11 +6,17 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap'
 import LogIn from '../components/LogIn';
+import * as userActions from '../actions/users/users';
 
 class HomePage extends React.Component{
 
+    constructor(props){
+        super(props);
+    }
+    
     handleLogin(values){
         console.log(values);
+        this.props.loginUser(values.email, values.password);
     }
 
     render(){
@@ -28,4 +34,8 @@ class HomePage extends React.Component{
 
 }
 
-export default HomePage;
+const mapStateToProps = (state) => {
+    return {};
+};
+
+export default withRouter(connect(mapStateToProps, userActions)(HomePage));

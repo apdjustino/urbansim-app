@@ -4,9 +4,10 @@
 import {combineReducers} from 'redux'
 import {routerReducer} from 'react-router-redux'
 import {reducer as formReducer} from 'redux-form';
-import user from './users'
+import users from './users'
 
 export default combineReducers({
+    users,
     routing: routerReducer,
     form: formReducer
 }); 
