@@ -62,6 +62,8 @@ app.post('/api/login', (req, res, next) => {
 
                 }
             });
+        }else{
+            res.json({success: false});
         }
     })
 });

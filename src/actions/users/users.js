@@ -83,7 +83,7 @@ export const loginUser = (email, password, redirect='/private') => {
                     dispatch(loginUserFail({
                         response: {
                             status: 403,
-                            statusText: "Invalid Token"
+                            statusText: "Invalid Email and/or Password"
                         }
                     }));
                 }

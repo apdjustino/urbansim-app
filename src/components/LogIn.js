@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {Form, FormGroup, Button, Label, Input, FormText, FormFeedback, } from 'reactstrap'
 import renderInput from '../components/Forms/FormComponents';
+import {connect} from 'react-redux'
 
 
 
@@ -17,11 +18,13 @@ const LogIn = (props) => {
             <Form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label for="email">Email</Label>
-                    <Field name="email" component={renderInput} type="email" />
+                    <Field name="email" component={renderInput} type="email" valid={props.isValid}/>
+                    <FormFeedback>{props.statusText}</FormFeedback>
                 </FormGroup>
                 <FormGroup>
                     <Label for="password">Password</Label>
-                    <Field name="password" component={renderInput} type="password" />
+                    <Field name="password" component={renderInput} type="password" valid={props.isValid} />
+                    <FormFeedback>{props.statusText}</FormFeedback>
                 </FormGroup>
                 <Button color="primary" type="submit">Log In</Button>
             </Form>
@@ -34,5 +37,12 @@ const LoginForm = reduxForm({
     form: 'login'
 })(LogIn);
 
-export default LoginForm;
+const mapStateToProps = (state) => {
+    return {
+        isValid: state.users.isValid,
+        statusText: state.users.statusText
+    }
+};
+
+export default connect(mapStateToProps)(LoginForm);
 
