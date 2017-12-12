@@ -13,6 +13,15 @@ export const loginUserRequest = () => {
     }
 };
 
+export const togglePasswordReset = (isReset) => {
+    return {
+        type: types.TOGGLE_PASSWORD_RESET,
+        payload: {
+            isReset: !isReset
+        }
+    }
+};
+
 export const loginUserSuccess = (token, email) => {
     localStorage.setItem('token', token);
     localStorage.setItem('email', email);

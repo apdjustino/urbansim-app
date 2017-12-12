@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {Container, Row, Col} from 'reactstrap'
 import LogIn from '../components/LogIn';
+import RequestNewPassword from '../components/RequestNewPassword';
 import * as userActions from '../actions/users/users';
 
 class HomePage extends React.Component{
@@ -15,16 +16,26 @@ class HomePage extends React.Component{
     }
     
     handleLogin(values){
-        console.log(values);
         this.props.loginUser(values.email, values.password);
+    }
+
+    handlePasswordRequest(e){
+        e.preventDefault();
+        this.props.togglePasswordReset(this.props.isReset)
     }
 
     render(){
         return (
             <Container>
                 <Row>
-                    <Col md={3}>
-                        <LogIn onSubmit={(values) => {this.handleLogin(values)}} />
+                    <Col md={6}>
+                        {
+                            (this.props.isReset ? <RequestNewPassword togglePwdReset={(e) =>{this.handlePasswordRequest(e)}}/> :
+                            <LogIn onSubmit={(values) => {this.handleLogin(values)}}
+                                   togglePwdReset={(e) => {this.handlePasswordRequest(e)}}/>
+                            )
+                        }
+                        
                     </Col>
                 </Row>
             </Container>
@@ -35,7 +46,9 @@ class HomePage extends React.Component{
 }
 
 const mapStateToProps = (state) => {
-    return {};
+    return {
+        isReset: state.users.isReset
+    };
 };
 
 export default withRouter(connect(mapStateToProps, userActions)(HomePage));

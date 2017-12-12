@@ -8,11 +8,9 @@ import renderInput from '../components/Forms/FormComponents';
 import {connect} from 'react-redux'
 
 
-
-
-
 const LogIn = (props) => {
     const {handleSubmit} = props;
+    console.log(props);
     return (
         <div>
             <Form onSubmit={handleSubmit}>
@@ -26,8 +24,10 @@ const LogIn = (props) => {
                     <Field name="password" component={renderInput} type="password" valid={props.isValid} />
                     <FormFeedback>{props.statusText}</FormFeedback>
                 </FormGroup>
-                <Button color="primary" type="submit">Log In</Button>
+                <Button color="primary" type="submit">Log In</Button> {' '}
+                <Button color="info" onClick={props.togglePwdReset}>Reset Password</Button>
             </Form>
+
         </div>
 
     )
