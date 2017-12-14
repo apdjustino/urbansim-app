@@ -43,6 +43,24 @@ mongoose.connection.on("disconnected", connect);
 
 
 //api routes (client side routes are handled in react component App.js
+app.post('/api/register', (req, res, next) => {
+    //is email already in use?
+    User.findOne({email: req.body.email}, (err, user) => {
+        if(user){
+            res.json({success: false, message: "Email already in use"});
+        }else{
+            //create a new user
+            User.create(req.body, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.json({ success: false});
+                }
+                res.json({ success: true, email: req.body.email });
+            });
+        }
+    });
+});
+
 
 app.post('/api/login', (req, res, next) => {
     const email = req.body.email;
@@ -53,7 +71,7 @@ app.post('/api/login', (req, res, next) => {
                     console.log(error);
                     res.json({success: false});
                 }else{
-                    console.log(isMatch);
+                    console.log(user.password);
                     if(isMatch){
                         const token = jwt.sign({email: email}, secrets.jwt_secret);
                         res.json({success: true, token: token});
@@ -98,15 +116,17 @@ app.post('/api/passwordreset', (req, res, next) => {
         if(err){
             res.json({success: false, reason: "Invalid token."})
         }else{
-            User.findOne({email: decoded.email}, (err, user) => {
-                if(err){
-                    res.json({success: false})
-                }else{
-                    user.password = req.body.password;
-                    user.save();
-                    res.json({success: true})
-                }
-            })
+            bcrypt.genSalt(5, function(err, salt){
+                if(err) return next(err);
+                bcrypt.hash(req.body.password, salt, null, function(error, hash){
+                    if(error) return next(error);
+                    User.update({email: decoded.email}, {$set:{password: hash}}, (error, count) =>{
+                        console.log(count);
+                    })
+                });
+            });
+            
+
         }
     })
 });

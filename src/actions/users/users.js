@@ -6,6 +6,28 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import history from '../../config/history';
 
+export function signupUserSuccess(token){
+    localStorage.setItem('token', token);
+    return {
+        type: types.SIGNUP_SUCCESS_USER,
+        payload: {
+            token: token
+        }
+    }
+}
+
+export function signupUserFail(error){
+    return {
+        type: types.SIGNUP_FAIL_USER,
+        payload: {
+            status: error.response.status,
+            statusText: error.response.statusText
+        }
+    }
+}
+
+
+
 
 export const loginUserRequest = () => {
     return {
@@ -175,7 +197,11 @@ export const submitPasswordReset = (email) => {
 export const resetPassword = (token, password1, password2) => {
     return (dispatch) => {
         let data = {};
+        console.log(password1);
+        console.log(password2);
+        console.log(password1 == password2)
         if(password1 == password2){
+            console.log("match");
             data = {token: token, password: password1}
         }else{
             dispatch(resetPasswordFail({
@@ -207,4 +233,16 @@ export const resetPassword = (token, password1, password2) => {
     }
 };
 
+export function registerUser(email, password){
+    const data = {email: email, password: password};
+    return function(dispatch){
+        return makeUserRequest("post", data, "/api/register")
+            .then(response => {
+                // dispatch(testSignUp(response.data.email))
+            })
+            .catch(error => {
+                dispatch(signupUserFail(error))
+            })
+    }
+}
 

@@ -22,11 +22,13 @@ UserSchema.pre('save', function(next){
     bcrypt.genSalt(5, function(err, salt){
         if(err) return next(err);
         bcrypt.hash(user.password, salt, null, function(error, hash){
+            
             if(error) return next(error);
             user.password = hash;
             next();
         });
     });
+    
 });
 
 

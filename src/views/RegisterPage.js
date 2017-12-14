@@ -4,23 +4,21 @@
 import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import {connect} from 'react-redux'
-import ResetPasswordForm from '../components/ResetPasswordForm';
+import RegisterUser from '../components/RegisterUser';
 import * as userActions from '../actions/users/users';
 
 
-
-class ResetPassword extends React.Component{
+class RegisterPage extends React.Component {
     
     constructor(props){
         super(props);
     }
     
+    
     handleSubmit(values){
         console.log(values);
-        const token = this.props.match.params._token;
-        this.props.resetPassword(token, values["reset-password1"], values["reset-password2"]);
+        this.props.registerUser(values['register-email'], values['register-password1']);
     }
-    
     
     render(){
         return (
@@ -28,17 +26,21 @@ class ResetPassword extends React.Component{
                 <Container>
                     <Row>
                         <Col md={6}>
-                            <ResetPasswordForm onSubmit={(values) => {this.handleSubmit(values)}} />
+                            <RegisterUser onSubmit={(values) => {this.handleSubmit(values)}} />
                         </Col>
                     </Row>
                 </Container>
             </div>
         )
+        
+    }
+    
+}
+
+const mapStateToProps = (state) => {
+    return {
+        
     }
 };
 
-const mapStateToProps = (state) => {
-    return {}
-};
-
-export default connect(mapStateToProps, userActions)(ResetPassword);
+export default connect(mapStateToProps, userActions)(RegisterPage);
