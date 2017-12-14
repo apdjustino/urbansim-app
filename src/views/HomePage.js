@@ -24,13 +24,21 @@ class HomePage extends React.Component{
         this.props.togglePasswordReset(this.props.isReset)
     }
 
+    handlePassword(values){
+        console.log(values);
+        this.props.submitPasswordReset(values['email-reset']);
+    }
+
+
     render(){
         return (
             <Container>
                 <Row>
                     <Col md={6}>
                         {
-                            (this.props.isReset ? <RequestNewPassword togglePwdReset={(e) =>{this.handlePasswordRequest(e)}}/> :
+                            (this.props.isReset ? <RequestNewPassword
+                                    togglePwdReset={(e) =>{this.handlePasswordRequest(e)}}
+                                    onSubmit={(values) => {this.handlePassword(values)}}/> :
                             <LogIn onSubmit={(values) => {this.handleLogin(values)}}
                                    togglePwdReset={(e) => {this.handlePasswordRequest(e)}}/>
                             )

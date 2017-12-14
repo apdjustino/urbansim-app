@@ -22,6 +22,22 @@ export const togglePasswordReset = (isReset) => {
     }
 };
 
+export const submitPasswordResetSuccess = () => {
+    return {
+        type: types.SUBMIT_PASSWORD_RESET_SUCCESS
+    }
+};
+
+export const submitPasswordResetFail = (error) => {
+    return {
+        type: types.SUBMIT_PASSWORD_RESET_FAIL,
+        payload: {
+            status: error.response.status,
+            statusText: error.response.statusText
+        }
+    }
+}
+
 export const loginUserSuccess = (token, email) => {
     localStorage.setItem('token', token);
     localStorage.setItem('email', email);
@@ -112,6 +128,30 @@ export const authenticate = (token) => {
                 dispatch(isAuthenticated(response.data.authenticated))
             });
     }
-}
+};
+
+export const submitPasswordReset = (email) => {
+    return (dispatch) => {
+        const data = {email: email};
+        return makeUserRequest("post", data, "/api/passwordreset")
+            .then(response => {
+                const success = response.data.success;
+                if(success){
+                    dispatch(submitPasswordResetSuccess())
+                }else{
+                    dispatch(submitPasswordResetFail({
+                        response: {
+                            status: 403,
+                            statusText: "Email address not found."
+                        }
+                    }))
+                }
+                
+            })
+            .catch(error => {
+                dispatch(submitPasswordResetFail(error))
+            });
+    }
+};
 
 

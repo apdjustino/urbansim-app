@@ -10,7 +10,6 @@ import {connect} from 'react-redux'
 
 const LogIn = (props) => {
     const {handleSubmit} = props;
-    console.log(props);
     return (
         <div>
             <Form onSubmit={handleSubmit}>

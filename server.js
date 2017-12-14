@@ -79,6 +79,18 @@ app.post('/api/authenticate', (req, res, next) => {
     })
 });
 
+app.post('/api/passwordreset', (req, res, next) => {
+    const email = req.body.email;
+    User.findOne({email: email}, (err, user) => {
+        if(user){
+            const token = jwt.sign({email: email}, secrets.jwt_secret);
+            res.json({success: true, token: token}); //replace this with smtp email with token in link.
+        }else{
+            res.json({success: false, statusText: "Email address not found."})
+        }
+    })
+});
+
 //main server listening loop
 app.listen(3000, function(){
     console.log("Urbansim listening on port 3000")
