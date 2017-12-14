@@ -29,6 +29,8 @@ const users = (state = {
             return Object.assign({}, state, {isReset: action.payload.isReset});
         case types.SUBMIT_PASSWORD_RESET_FAIL:
             return Object.assign({}, state, {pwdResetEmailIsValid: false, statusText: `${action.payload.statusText}`});
+        case types.RESET_PASSWORD_FAIL:
+            return Object.assign({}, state, {isValid: false, statusText: action.payload.statusText});
         default:
             return state
     }

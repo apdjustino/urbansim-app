@@ -53,6 +53,7 @@ app.post('/api/login', (req, res, next) => {
                     console.log(error);
                     res.json({success: false});
                 }else{
+                    console.log(isMatch);
                     if(isMatch){
                         const token = jwt.sign({email: email}, secrets.jwt_secret);
                         res.json({success: true, token: token});
@@ -79,7 +80,7 @@ app.post('/api/authenticate', (req, res, next) => {
     })
 });
 
-app.post('/api/passwordreset', (req, res, next) => {
+app.post('/api/passwordrequest', (req, res, next) => {
     const email = req.body.email;
     User.findOne({email: email}, (err, user) => {
         if(user){
@@ -87,6 +88,25 @@ app.post('/api/passwordreset', (req, res, next) => {
             res.json({success: true, token: token}); //replace this with smtp email with token in link.
         }else{
             res.json({success: false, statusText: "Email address not found."})
+        }
+    })
+});
+
+app.post('/api/passwordreset', (req, res, next) => {
+    const token = req.body.token;
+    jwt.verify(token, secrets.jwt_secret, (err, decoded) => {
+        if(err){
+            res.json({success: false, reason: "Invalid token."})
+        }else{
+            User.findOne({email: decoded.email}, (err, user) => {
+                if(err){
+                    res.json({success: false})
+                }else{
+                    user.password = req.body.password;
+                    user.save();
+                    res.json({success: true})
+                }
+            })
         }
     })
 });

@@ -36,7 +36,23 @@ export const submitPasswordResetFail = (error) => {
             statusText: error.response.statusText
         }
     }
-}
+};
+
+export const resetPasswordFail = (error) => {
+    return {
+        type: types.RESET_PASSWORD_FAIL,
+        payload: {
+            status: error.response.status,
+            statusText: error.response.statusText
+        }
+    }
+};
+
+export const resetPasswordSuccess = () => {
+    return {
+        type: types.RESET_PASSWORD_SUCCESS
+    }
+};
 
 export const loginUserSuccess = (token, email) => {
     localStorage.setItem('token', token);
@@ -101,6 +117,7 @@ export const loginUser = (email, password, redirect='/private') => {
         return makeUserRequest("post", data, "/api/login")
             .then(response => {
                 try {
+                    console.log(response);
                     let decoded = jwtDecode(response.data.token);
                     dispatch(loginUserSuccess(response.data.token, decoded.email));
                     history.push(redirect);
@@ -133,10 +150,11 @@ export const authenticate = (token) => {
 export const submitPasswordReset = (email) => {
     return (dispatch) => {
         const data = {email: email};
-        return makeUserRequest("post", data, "/api/passwordreset")
+        return makeUserRequest("post", data, "/api/passwordrequest")
             .then(response => {
                 const success = response.data.success;
                 if(success){
+                    console.log(response.data.token);
                     dispatch(submitPasswordResetSuccess())
                 }else{
                     dispatch(submitPasswordResetFail({
@@ -151,6 +169,41 @@ export const submitPasswordReset = (email) => {
             .catch(error => {
                 dispatch(submitPasswordResetFail(error))
             });
+    }
+};
+
+export const resetPassword = (token, password1, password2) => {
+    return (dispatch) => {
+        let data = {};
+        if(password1 == password2){
+            data = {token: token, password: password1}
+        }else{
+            dispatch(resetPasswordFail({
+                response: {
+                    status: 403,
+                    statusText: "Passwords do not match."
+                }
+            }));
+            return;
+        }
+        return makeUserRequest("post", data, "/api/passwordreset")
+            .then(response => {
+                const success = response.data.success;
+                if(success){
+                    dispatch(resetPasswordSuccess());
+                    
+                }else{
+                    dispatch(resetPasswordFail({
+                        response: {
+                            status: 403,
+                            statusText: `Error resetting the password: ${response.data.reason}`
+                        }
+                    }))
+                }
+            })
+            .catch(error => {
+                dispatch(resetPasswordFail(error))
+            })
     }
 };
 
