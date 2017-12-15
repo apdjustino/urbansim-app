@@ -10,7 +10,8 @@ const users = (state = {
     statusText: null,
     isValid: null,
     isReset: false,
-    pwdResetEmailIsValid: null
+    pwdResetEmailIsValid: null,
+    isLoading: false
 }, action) => {
     switch(action.type) {
         case types.LOGIN_USER_SUCCESS:
@@ -28,7 +29,11 @@ const users = (state = {
         case types.TOGGLE_PASSWORD_RESET:
             return Object.assign({}, state, {isReset: action.payload.isReset});
         case types.SUBMIT_PASSWORD_RESET_FAIL:
-            return Object.assign({}, state, {pwdResetEmailIsValid: false, statusText: `${action.payload.statusText}`});
+            return Object.assign({}, state, {pwdResetEmailIsValid: false, statusText: `${action.payload.statusText}`, isLoading: false});
+        case types.SUBMIT_PASSWORD_RESET_REQUEST:
+            return Object.assign({}, state, {isLoading: true});
+        case types.SUBMIT_PASSWORD_RESET_SUCCESS:
+            return Object.assign({}, state, {pwdResetEmailIsValid: true, statusText: action.payload.statusText, isLoading: false});
         case types.RESET_PASSWORD_FAIL:
             return Object.assign({}, state, {isValid: false, statusText: action.payload.statusText});
         default:

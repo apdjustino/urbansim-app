@@ -9,6 +9,7 @@ import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt-nodejs';
 import User from './src/server/user';
 import secrets from './src/server/secrets';
+import nodemailer from 'nodemailer';
 
 
 //create and configure the express server
@@ -103,7 +104,32 @@ app.post('/api/passwordrequest', (req, res, next) => {
     User.findOne({email: email}, (err, user) => {
         if(user){
             const token = jwt.sign({email: email}, secrets.jwt_secret);
-            res.json({success: true, token: token}); //replace this with smtp email with token in link.
+            const transporter = nodemailer.createTransport({
+                host: "smtp.office365.com",
+                port: 587,
+                secure: false,
+                auth: {
+                    user: secrets.smtp_username,
+                    pass: secrets.smtp_password
+                }
+            });
+
+            const message = {
+                from: "support@drcog.org",
+                to: email,
+                subject: "DRCOG UrbanSim Password Reset",
+                text: `You have recently requested a password reset DRCOG UrbanSim. Click the following link to reset your password: http://${secrets.base_url}/reset-password/${token}`
+            };
+
+            transporter.sendMail(message, function(err, info){
+                if(err){
+                    console.log(err);
+                }else{
+                    res.json({success:true})
+                }
+            });
+
+            // res.json({success: true, token: token}); //replace this with smtp email with token in link.
         }else{
             res.json({success: false, statusText: "Email address not found."})
         }

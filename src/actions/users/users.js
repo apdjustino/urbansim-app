@@ -44,9 +44,13 @@ export const togglePasswordReset = (isReset) => {
     }
 };
 
-export const submitPasswordResetSuccess = () => {
+export const submitPasswordResetSuccess = (res) => {
     return {
-        type: types.SUBMIT_PASSWORD_RESET_SUCCESS
+        type: types.SUBMIT_PASSWORD_RESET_SUCCESS,
+        payload:{
+            status: res.response.status,
+            statusText: res.response.statusText
+        }
     }
 };
 
@@ -57,6 +61,12 @@ export const submitPasswordResetFail = (error) => {
             status: error.response.status,
             statusText: error.response.statusText
         }
+    }
+};
+
+export const submitPasswordResetRequest = () => {
+    return {
+        type: types.SUBMIT_PASSWORD_RESET_REQUEST
     }
 };
 
@@ -72,7 +82,7 @@ export const resetPasswordFail = (error) => {
 
 export const resetPasswordSuccess = () => {
     return {
-        type: types.RESET_PASSWORD_SUCCESS
+        type: types.RESET_PASSWORD_SUCCESS,
     }
 };
 
@@ -171,13 +181,18 @@ export const authenticate = (token) => {
 
 export const submitPasswordReset = (email) => {
     return (dispatch) => {
+        dispatch(submitPasswordResetRequest());
         const data = {email: email};
         return makeUserRequest("post", data, "/api/passwordrequest")
             .then(response => {
                 const success = response.data.success;
                 if(success){
-                    console.log(response.data.token);
-                    dispatch(submitPasswordResetSuccess())
+                    dispatch(submitPasswordResetSuccess({
+                        response: {
+                            status: 200,
+                            statusText: "Password reset request sent. Look for an email from support@drcog.org for a reset-link."
+                        }
+                    }))
                 }else{
                     dispatch(submitPasswordResetFail({
                         response: {
@@ -197,11 +212,7 @@ export const submitPasswordReset = (email) => {
 export const resetPassword = (token, password1, password2) => {
     return (dispatch) => {
         let data = {};
-        console.log(password1);
-        console.log(password2);
-        console.log(password1 == password2)
         if(password1 == password2){
-            console.log("match");
             data = {token: token, password: password1}
         }else{
             dispatch(resetPasswordFail({
@@ -222,7 +233,7 @@ export const resetPassword = (token, password1, password2) => {
                     dispatch(resetPasswordFail({
                         response: {
                             status: 403,
-                            statusText: `Error resetting the password: ${response.data.reason}`
+                            statusText: `Error resetting the password: ${response.data.statusText}`
                         }
                     }))
                 }
