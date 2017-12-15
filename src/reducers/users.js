@@ -36,6 +36,12 @@ const users = (state = {
             return Object.assign({}, state, {pwdResetEmailIsValid: true, statusText: action.payload.statusText, isLoading: false});
         case types.RESET_PASSWORD_FAIL:
             return Object.assign({}, state, {isValid: false, statusText: action.payload.statusText});
+        case types.SIGNUP_USER:
+            return Object.assign({}, state, {isLoading: true});
+        case types.SIGNUP_USER_FAIL:
+            return Object.assign({}, state, {isLoading: false, isValid: false, statusText: action.payload.statusText});
+        case types.SIGNUP_USER_SUCCESS:
+            return Object.assign({}, state, {isLoading: false, isValid: true, statusText: action.payload.statusText});
         default:
             return state
     }

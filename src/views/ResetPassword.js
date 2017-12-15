@@ -16,7 +16,6 @@ class ResetPassword extends React.Component{
     }
     
     handleSubmit(values){
-        console.log(values);
         const token = this.props.match.params._token;
         this.props.resetPassword(token, values["reset-password1"], values["reset-password2"]);
     }

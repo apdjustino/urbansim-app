@@ -4,7 +4,7 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {Form, FormGroup, Button, Label, FormFeedback, FormText} from 'reactstrap';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 import renderInput from '../components/Forms/FormComponents';
 import {connect} from 'react-redux';
 

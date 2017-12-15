@@ -3,7 +3,8 @@
  */
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import {Form, FormGroup, Button, Label, FormFeedback, } from 'reactstrap'
+import {Form, FormGroup, Button, Label, FormFeedback, FormText} from 'reactstrap'
+import Loading from './Loading';
 import renderInput from '../components/Forms/FormComponents';
 import SelectComponent from '../components/Forms/SelectComponent';
 import {connect} from 'react-redux'
@@ -18,19 +19,15 @@ const RegisterUserComponent = (props) => {
         <Form onSubmit={handleSubmit}>
             <FormGroup>
                 <Label for="register-email">Email</Label>
-                <Field name="register-email" component={renderInput} type="email" />
-            </FormGroup>
-            <FormGroup>
-                <Label for="register-password1">Password</Label>
-                <Field name="register-password1" component={renderInput} type="password" />
-            </FormGroup>
-            <FormGroup>
-                <Label for="register-password2">Confirm Password</Label>
-                <Field name="register-password2" component={renderInput} type="password" />
+                <Field name="register-email" component={renderInput} type="email" valid={props.isValid}/>
+                <FormFeedback>{props.statusText}</FormFeedback>
             </FormGroup>
             <FormGroup>
                 <Label for="role-select">Role</Label>
                 <Field name="role-select" component={SelectComponent} type="select" selectOptions={options} />
+                {
+                    (props.isLoading ? <Loading /> : <FormText>{props.statusText}</FormText> ) 
+                }
             </FormGroup>
             <Button color="primary" type="submit">Register</Button>
         </Form>
@@ -39,7 +36,10 @@ const RegisterUserComponent = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        initialValues: {"role-select": "Admin"}
+        initialValues: {"role-select": "Admin"},
+        isValid: state.users.isValid,
+        isLoading: state.users.isLoading,
+        statusText: state.users.statusText
     }
 };
 

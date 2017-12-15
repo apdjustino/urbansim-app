@@ -48,7 +48,7 @@ app.post('/api/register', (req, res, next) => {
     //is email already in use?
     User.findOne({email: req.body.email}, (err, user) => {
         if(user){
-            res.json({success: false, message: "Email already in use"});
+            res.json({success: false, statusText: "Email already in use"});
         }else{
             //create a new user
             User.create(req.body, (err) => {
@@ -56,7 +56,34 @@ app.post('/api/register', (req, res, next) => {
                     console.error(err);
                     res.json({ success: false});
                 }
-                res.json({ success: true, email: req.body.email });
+                const token = jwt.sign({email: req.body.email}, secrets.jwt_secret);
+                const transporter = nodemailer.createTransport({
+                    host: "smtp.office365.com",
+                    port: 587,
+                    secure: false,
+                    auth: {
+                        user: secrets.smtp_username,
+                        pass: secrets.smtp_password
+                    }
+                });
+
+                const message = {
+                    from: "support@drcog.org",
+                    to: req.body.email,
+                    subject: "DRCOG UrbanSim Account Created.",
+                    text: `You have been invited to use DRCOG UrbanSim at this email address.. Click the following link to set your password: http://${secrets.base_url}/reset-password/${token}`
+                };
+
+                transporter.sendMail(message, function(err, info){
+                    if(err){
+                        console.log(err);
+                        res.json({success:false})
+                    }else{
+                        res.json({success:true})
+                    }
+                });
+                
+                // res.json({ success: true, email: req.body.email });
             });
         }
     });

@@ -6,19 +6,19 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import history from '../../config/history';
 
-export function signupUserSuccess(token){
-    localStorage.setItem('token', token);
+export function signupUserSuccess(res){
     return {
-        type: types.SIGNUP_SUCCESS_USER,
+        type: types.SIGNUP_USER_SUCCESS,
         payload: {
-            token: token
+            status: res.response.status,
+            statusText: res.response.statusText
         }
     }
 }
 
 export function signupUserFail(error){
     return {
-        type: types.SIGNUP_FAIL_USER,
+        type: types.SIGNUP_USER_FAIL,
         payload: {
             status: error.response.status,
             statusText: error.response.statusText
@@ -26,7 +26,11 @@ export function signupUserFail(error){
     }
 }
 
-
+export const signUpUserRequest = () => {
+    return {
+        type: types.SIGNUP_USER
+    }
+}
 
 
 export const loginUserRequest = () => {
@@ -246,11 +250,26 @@ export const resetPassword = (token, password1, password2) => {
 
 export function registerUser(email, password, role){
     const data = {email: email, password: password, role: role};
-    console.log(data);
     return function(dispatch){
+        dispatch(signUpUserRequest());
         return makeUserRequest("post", data, "/api/register")
             .then(response => {
-                // dispatch(testSignUp(response.data.email))
+                const success = response.data.success;
+                if(success){
+                    dispatch(signupUserSuccess({
+                        response: {
+                            status: 200,
+                            statusText: "Registration email sent."
+                        }
+                    }))
+                }else{
+                    dispatch(signupUserFail({
+                        response: {
+                            status: 403,
+                            statusText: response.data.statusText
+                        }
+                    }))
+                }
             })
             .catch(error => {
                 dispatch(signupUserFail(error))
