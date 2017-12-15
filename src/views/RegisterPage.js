@@ -17,7 +17,7 @@ class RegisterPage extends React.Component {
     
     handleSubmit(values){
         console.log(values);
-        this.props.registerUser(values['register-email'], values['register-password1']);
+        this.props.registerUser(values['register-email'], values['register-password1'], values['role-select']);
     }
     
     render(){

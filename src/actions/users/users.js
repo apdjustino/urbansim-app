@@ -233,8 +233,9 @@ export const resetPassword = (token, password1, password2) => {
     }
 };
 
-export function registerUser(email, password){
-    const data = {email: email, password: password};
+export function registerUser(email, password, role){
+    const data = {email: email, password: password, role: role};
+    console.log(data);
     return function(dispatch){
         return makeUserRequest("post", data, "/api/register")
             .then(response => {

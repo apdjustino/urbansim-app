@@ -5,10 +5,15 @@ import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {Form, FormGroup, Button, Label, FormFeedback, } from 'reactstrap'
 import renderInput from '../components/Forms/FormComponents';
+import SelectComponent from '../components/Forms/SelectComponent';
 import {connect} from 'react-redux'
 
 const RegisterUserComponent = (props) => {
     const {handleSubmit} = props;
+    const options = [
+        {value: "admin", name: "Admin"},
+        {value: "user", name: "Modeler"}
+    ];
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup>
@@ -23,6 +28,10 @@ const RegisterUserComponent = (props) => {
                 <Label for="register-password2">Confirm Password</Label>
                 <Field name="register-password2" component={renderInput} type="password" />
             </FormGroup>
+            <FormGroup>
+                <Label for="role-select">Role</Label>
+                <Field name="role-select" component={SelectComponent} type="select" selectOptions={options} />
+            </FormGroup>
             <Button color="primary" type="submit">Register</Button>
         </Form>
     )
@@ -30,7 +39,7 @@ const RegisterUserComponent = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        
+        initialValues: {"role-select": "Admin"}
     }
 };
 
