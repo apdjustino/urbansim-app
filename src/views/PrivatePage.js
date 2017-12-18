@@ -6,15 +6,21 @@ import {connect} from 'react-redux';
 import {Container, Jumbotron, Button} from 'reactstrap'
 import * as userActions from '../actions/users/users'
 
-const PrivatePage = (props) => (
-    <Container>
-        <Jumbotron>
-            <h1>This is a private page</h1>
-            <h5>User: {props.email}</h5>
-        </Jumbotron>
-        <Button color="primary" onClick={() => {props.logOutUser()}}>Log Out</Button>
-    </Container>
-);
+const PrivatePage = (props) => {
+
+    return (
+        <Container>
+            <Jumbotron>
+                <h1>This is a private page</h1>
+                <h5>User: {props.email}</h5>
+            </Jumbotron>
+            <Button color="primary" onClick={() => {props.logOutUser()}}>Log Out</Button> {' '}
+            {(props.isAdmin ? <Button color="primary">Admin</Button> : <div></div>)}
+        </Container>
+    )
+}
+
+;
 
 const mapStateToProps = (state) => {
     return {

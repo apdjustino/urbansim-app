@@ -122,14 +122,15 @@ export const logOut = () => {
     }
 };
 
-export const isAuthenticated = (authenticated) => {
+export const isAuthenticated = (authenticated, isAdmin) => {
     return {
         type: types.IS_AUTHENTICATED,
         payload:{
-            authenticated: authenticated
+            authenticated: authenticated,
+            isAdmin: isAdmin
         }
     }
-}
+};
 
 export const makeUserRequest = (method, data, url) => {
     return axios({
@@ -178,7 +179,7 @@ export const authenticate = (token) => {
         const data = {token: token};
         return makeUserRequest("post", data, "/api/authenticate")
             .then(response => {
-                dispatch(isAuthenticated(response.data.authenticated))
+                dispatch(isAuthenticated(response.data.authenticated, response.data.isAdmin))
             });
     }
 };

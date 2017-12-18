@@ -58,7 +58,7 @@ app.post('/api/register', (req, res, next) => {
                 }
                 const token = jwt.sign({email: req.body.email}, secrets.jwt_secret);
                 const transporter = nodemailer.createTransport({
-                    host: "smtp.office365.com",
+                    host: secrets.smtp_host,
                     port: 587,
                     secure: false,
                     auth: {
@@ -99,7 +99,6 @@ app.post('/api/login', (req, res, next) => {
                     console.log(error);
                     res.json({success: false});
                 }else{
-                    console.log(user.password);
                     if(isMatch){
                         const token = jwt.sign({email: email}, secrets.jwt_secret);
                         res.json({success: true, token: token});
@@ -119,9 +118,20 @@ app.post('/api/authenticate', (req, res, next) => {
     const token = req.body.token;
     jwt.verify(token, secrets.jwt_secret, (err, decoded) => {
         if(err){
-            res.json({authenticated: false});
+            res.json({authenticated: false, isAdmin: false});
         }else{
-            res.json({authenticated: true})
+            //next check if user is Admin
+            User.findOne({email: decoded.email}, (err, user) => {
+                if(user){
+                    if(user.role == 'Admin'){
+                        res.json({authenticated: true, isAdmin: true});
+                    }else{
+                        res.json({authenticated: true, isAdmin: false});
+                    }
+                }else{
+                    res.json({authenticated: false, isAdmin: false})
+                }
+            });
         }
     })
 });

@@ -11,7 +11,8 @@ const users = (state = {
     isValid: null,
     isReset: false,
     pwdResetEmailIsValid: null,
-    isLoading: false
+    isLoading: false,
+    isAdmin: false
 }, action) => {
     switch(action.type) {
         case types.LOGIN_USER_SUCCESS:
@@ -23,7 +24,7 @@ const users = (state = {
                 {statusText: `${action.payload.statusText}`, isValid: false}
             );
         case types.IS_AUTHENTICATED:
-            return Object.assign({}, state, {authenticated: action.payload.authenticated});
+            return Object.assign({}, state, {authenticated: action.payload.authenticated, isAdmin: action.payload.isAdmin});
         case types.LOGOUT_USER:
             return Object.assign({}, state, {authenticated: false});
         case types.TOGGLE_PASSWORD_RESET:

@@ -30,7 +30,8 @@ class Authenticated extends React.Component{
 
 const mapStateToProps = (state) => {
     return {
-        isAuth: state.users.authenticated
+        isAuth: state.users.authenticated,
+        isAdmin: state.users.isAdmin
     };
 };
 
