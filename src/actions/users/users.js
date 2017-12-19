@@ -94,9 +94,15 @@ export const resetPasswordFail = (error) => {
     }
 };
 
-export const resetPasswordSuccess = () => {
+export const resetPasswordSuccess = (token, email) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('email', email);
     return {
         type: types.RESET_PASSWORD_SUCCESS,
+        payload: {
+            token: token,
+            email: email
+        }
     }
 };
 
@@ -179,7 +185,6 @@ export const loginUser = (email, password, redirect='/private') => {
         return makeUserRequest("post", data, "/api/login")
             .then(response => {
                 try {
-                    console.log(response);
                     let decoded = jwtDecode(response.data.token);
                     dispatch(loginUserSuccess(response.data.token, decoded.email));
                     history.push(redirect);
@@ -257,7 +262,9 @@ export const resetPassword = (token, password1, password2) => {
             .then(response => {
                 const success = response.data.success;
                 if(success){
-                    dispatch(resetPasswordSuccess());
+                    const email = jwtDecode(token).email;
+                    dispatch(resetPasswordSuccess(token, email));
+                    history.push('/private');
                     
                 }else{
                     dispatch(resetPasswordFail({

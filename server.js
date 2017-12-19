@@ -186,6 +186,7 @@ app.post('/api/passwordreset', (req, res, next) => {
                     if(error) return next(error);
                     User.update({email: decoded.email}, {$set:{password: hash}}, (error, count) =>{
                         console.log(count);
+                        res.json({success: true});
                     })
                 });
             });
