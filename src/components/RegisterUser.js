@@ -11,10 +11,7 @@ import {connect} from 'react-redux'
 
 const RegisterUserComponent = (props) => {
     const {handleSubmit} = props;
-    const options = [
-        {value: "admin", name: "Admin"},
-        {value: "user", name: "Modeler"}
-    ];
+    
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup>
@@ -24,7 +21,7 @@ const RegisterUserComponent = (props) => {
             </FormGroup>
             <FormGroup>
                 <Label for="role-select">Role</Label>
-                <Field name="role-select" component={SelectComponent} type="select" selectOptions={options} />
+                <Field name="role-select" component={SelectComponent} type="select" selectOptions={props.roleOptions} />
                 {
                     (props.isLoading ? <Loading /> : <FormText>{props.statusText}</FormText> ) 
                 }
@@ -39,7 +36,8 @@ const mapStateToProps = (state) => {
         initialValues: {"role-select": "Admin"},
         isValid: state.users.isValid,
         isLoading: state.users.isLoading,
-        statusText: state.users.statusText
+        statusText: state.users.statusText,
+        roleOptions: state.users.roleOptions
     }
 };
 

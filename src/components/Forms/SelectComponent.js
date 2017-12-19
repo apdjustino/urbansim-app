@@ -23,7 +23,7 @@ const SelectComponent = ({
 }) => {
     const optionsArr = selectOptions.map((option) => {
         return (
-            <option val={option.value}>{option.name}</option>
+            <option value={option.value}>{option.name}</option>
         )
     });
     return (

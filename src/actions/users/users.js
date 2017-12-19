@@ -6,6 +6,7 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import history from '../../config/history';
 
+
 export function signupUserSuccess(res){
     return {
         type: types.SIGNUP_USER_SUCCESS,
@@ -30,8 +31,17 @@ export const signUpUserRequest = () => {
     return {
         type: types.SIGNUP_USER
     }
-}
+};
 
+
+export const loadCurrentUsers = (users) => {
+    return {
+        type: types.LOAD_CURRENT_USERS,
+        payload: {
+            currentUsers: users
+        }
+    }
+};
 
 export const loginUserRequest = () => {
     return {
@@ -128,6 +138,21 @@ export const isAuthenticated = (authenticated, isAdmin) => {
         payload:{
             authenticated: authenticated,
             isAdmin: isAdmin
+        }
+    }
+};
+
+export const updateRoleSuccess = () => {
+    return {
+        type: types.UPDATE_ROLE_SUCCESS
+    }
+};
+
+export const updateRoleFail = (error) => {
+    return {
+        type: types.UPDATE_ROLE_FAIL,
+        payload: {
+            statusText: error
         }
     }
 };
@@ -278,3 +303,29 @@ export function registerUser(email, password, role){
     }
 }
 
+export const getUsers = (token) => {
+    const data = {token: token};
+    return function(dispatch){
+        makeUserRequest("post", data, "/api/users")
+            .then(response => {
+                dispatch(loadCurrentUsers(response.data.users))
+            })
+    }
+};
+
+export const updateUserRole = (token, email, newRole) => {
+    const data = {token: token, email: email, newRole: newRole};
+    return function(dispatch){
+        makeUserRequest("post", data, "/api/updaterole")
+            .then(response => {
+                if(response.data.success){
+                    dispatch(updateRoleSuccess())
+                }else{
+                    dispatch(updateRoleFail(response.data.reason))
+                }
+            })
+            .catch(error => {
+                dispatch(updateRoleFail(error))
+            })
+    }
+}

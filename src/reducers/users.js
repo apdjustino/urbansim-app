@@ -12,7 +12,9 @@ const users = (state = {
     isReset: false,
     pwdResetEmailIsValid: null,
     isLoading: false,
-    isAdmin: false
+    isAdmin: false,
+    roleOptions: types.roleOptions,
+    currentUsers: []
 }, action) => {
     switch(action.type) {
         case types.LOGIN_USER_SUCCESS:
@@ -43,6 +45,12 @@ const users = (state = {
             return Object.assign({}, state, {isLoading: false, isValid: false, statusText: action.payload.statusText});
         case types.SIGNUP_USER_SUCCESS:
             return Object.assign({}, state, {isLoading: false, isValid: true, statusText: action.payload.statusText});
+        case types.LOAD_CURRENT_USERS:
+            return Object.assign({}, state, {currentUsers: action.payload.currentUsers});
+        case types.UPDATE_ROLE_FAIL:
+            return Object.assign({}, state, {isValid: false, statusText: action.payload.statusText});
+        case types.UPDATE_ROLE_SUCCESS:
+            return Object.assign({}, state, {isValid: true, statusText: "User role successfully updated"});
         default:
             return state
     }

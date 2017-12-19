@@ -10,6 +10,7 @@ import bcrypt from 'bcrypt-nodejs';
 import User from './src/server/user';
 import secrets from './src/server/secrets';
 import nodemailer from 'nodemailer';
+import {pick} from 'lodash';
 
 
 //create and configure the express server
@@ -190,6 +191,47 @@ app.post('/api/passwordreset', (req, res, next) => {
             });
             
 
+        }
+    })
+});
+
+app.post('/api/users', (req, res, next) => {
+    const token = req.body.token;
+    jwt.verify(token, secrets.jwt_secret, (err, decoded) => {
+        if(err){
+            res.json({success: false, reason: "Invalid token."});
+        }else{
+            User.find({}, (err, users) => {
+                res.json({success: true, users: users.map((user) => {
+                    return pick(user, ["email", "role"])
+                })});
+            });
+        }
+    })
+});
+
+app.post('/api/updaterole', (req, res, next) => {
+    const token = req.body.token;
+    jwt.verify(token, secrets.jwt_secret, (err, decoded) => {
+        if(err){
+            res.json({success: false, reason: "Invalid token."});
+        }else{
+            User.findOne({email: decoded.email}, (err, user) => {
+                if(user.role == "Admin"){
+                    User.update({email: req.body.email}, {$set: {role: req.body.newRole}}, (error, count) => {
+                        //console.log(count);
+                        if(error){
+                            res.json({success: false, reason: error});  
+                        }else{
+                            res.json({success: true})    
+                        } 
+                        
+                    })
+                }else{
+                    res.json({success:false, reason: "Invalid permissions."})
+                }
+            })
+            
         }
     })
 });
