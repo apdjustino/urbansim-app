@@ -8,6 +8,7 @@ import PrivatePage from './views/PrivatePage';
 import ResetPassword from './views/ResetPassword';
 import RegisterPage from './views/RegisterPage';
 import UpdateUserRolePage from './views/UpdateUserRolePage';
+import DeleteUser from './views/DeleteUser'
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -22,6 +23,7 @@ const App = ({store}) => (
                 <Route exact path="/reset-password/:_token" component={ResetPassword} />
                 <Route exact path="/register" component={RegisterPage} />
                 <Route exact path="/updaterole" component={UpdateUserRolePage} />
+                <Route exact path="/deleteuser" component={DeleteUser} />
             </div>
         </Router>
     </Provider>

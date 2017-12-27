@@ -27,6 +27,26 @@ export function signupUserFail(error){
     }
 }
 
+export const deleteUserSuccess = (res) => {
+    return {
+        type: types.DELETE_USER_SUCCESS,
+        payload: {
+            status: res.response.status,
+            statusText: res.response.statusText
+        }
+    }
+};
+
+export const deleteUserFail = (error) => {
+    return {
+        type: types.DELETE_USER_FAIL,
+        payload: {
+            status: error.response.status,
+            statusText: error.response.statusText
+        }
+    }
+}
+
 export const signUpUserRequest = () => {
     return {
         type: types.SIGNUP_USER
@@ -162,6 +182,8 @@ export const updateRoleFail = (error) => {
         }
     }
 };
+
+
 
 export const makeUserRequest = (method, data, url) => {
     return axios({
@@ -333,6 +355,33 @@ export const updateUserRole = (token, email, newRole) => {
             })
             .catch(error => {
                 dispatch(updateRoleFail(error))
+            })
+    }
+};
+
+export const deleteUser = (token, email) => {
+    const data = {token: token, email: email};
+    return function(dispatch){
+        makeUserRequest("post", data, "/api/deleteuser")
+            .then(response => {
+                if(response.data.success){
+                    dispatch(deleteUserSuccess({
+                        response: {
+                            status: 200,
+                            statusText: "User successfully deleted."
+                        }
+                    }));
+                }else{
+                    dispatch(deleteUserFail({
+                        response: {
+                            status: 405,
+                            statusText: response.data.reason
+                        }
+                    }));
+                }
+            })
+            .catch(error => {
+                dispatch(deleteUserFail(error));
             })
     }
 }

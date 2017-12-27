@@ -9,7 +9,7 @@ import {connect} from 'react-redux'
 
 const UpdateUserRole = (props) => {
     const {handleSubmit} = props;
-
+    console.log(props.userRole);
     return (
         <Form onSubmit={handleSubmit}>
             <FormGroup>
@@ -39,14 +39,16 @@ const UpdateUserRole = (props) => {
 
 
 const UpdateUserRoleForm = reduxForm({
-    form: "UpdateUserRoleForm"
+    form: "UpdateUserRoleForm",
+    enableReinitialize: true
 })(UpdateUserRole);
 
 const selector = formValueSelector('UpdateUserRoleForm');
 
 const mapStateToProps = (state) => {
+    const initUser = (state.users.currentUsers.length > 0 ? state.users.currentUsers[0].email : "");
     return {
-        initialValues: {"role-select": "Admin"},
+        initialValues: {"role-select": "Admin", "user-select": initUser},
         roleOptions: state.users.roleOptions,
         currentUsers: state.users.currentUsers,
         userRole: selector(state, 'user-select'),

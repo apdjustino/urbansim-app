@@ -53,6 +53,10 @@ const users = (state = {
             return Object.assign({}, state, {isValid: true, statusText: "User role successfully updated"});
         case types.RESET_PASSWORD_SUCCESS:
             return Object.assign({}, state, {token: action.payload.token, email: action.payload.email, isValid: null});
+        case types.DELETE_USER_FAIL:
+            return Object.assign({}, state, {isValid: false, statusText: action.payload.statusText});
+        case types.DELETE_USER_SUCCESS:
+            return Object.assign({}, state, {isValid: true, statusText: action.payload.statusText});
         default:
             return state
     }

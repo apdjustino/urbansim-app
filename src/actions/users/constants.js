@@ -18,6 +18,8 @@ export const SIGNUP_USER_FAIL = "SIGNUP_USER_FAIL";
 export const LOAD_CURRENT_USERS = "LOAD_CURRENT_USERS";
 export const UPDATE_ROLE_SUCCESS = "UPDATE_ROLE_SUCCESS";
 export const UPDATE_ROLE_FAIL = "UPDATE_ROLE_FAIL";
+export const DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS";
+export const DELETE_USER_FAIL = "DELETE_USER_FAIL";
 export const roleOptions = [
     {value: "Admin", name: "Admin"},
     {value: "Modeler", name: "Modeler"}

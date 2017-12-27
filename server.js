@@ -237,6 +237,32 @@ app.post('/api/updaterole', (req, res, next) => {
     })
 });
 
+app.post('/api/deleteuser', (req, res, next) => {
+    const token = req.body.token;
+    jwt.verify(token, secrets.jwt_secret, (err, decoded) => {
+        if(err){
+            res.json({success: false, reason: "Invalid token."});
+        }else{
+            User.findOne({email: decoded.email}, (err, user) => {
+                if(user.role == "Admin"){
+                    User.remove({email: req.body.email}, (error) => {
+                        //console.log(count);
+                        if(error){
+                            res.json({success: false, reason: error});
+                        }else{
+                            res.json({success: true})
+                        }
+
+                    })
+                }else{
+                    res.json({success:false, reason: "Invalid permissions."})
+                }
+            })
+
+        }
+    })
+});
+
 //main server listening loop
 app.listen(3000, function(){
     console.log("Urbansim listening on port 3000")
