@@ -21,9 +21,9 @@ const App = ({store}) => (
                 <Route exact path="/" component={HomePage} />
                 <Route exact path="/private" render={ props => (<Authenticated component={PrivatePage} {...props}/>)} />
                 <Route exact path="/reset-password/:_token" component={ResetPassword} />
-                <Route exact path="/register" component={RegisterPage} />
-                <Route exact path="/updaterole" component={UpdateUserRolePage} />
-                <Route exact path="/deleteuser" component={DeleteUser} />
+                <Route exact path="/register" render={ props => (<Authenticated component={RegisterPage} {...props}/>)} />
+                <Route exact path="/updaterole" render={ props => (<Authenticated component={UpdateUserRolePage} {...props}/>)} />
+                <Route exact path="/deleteuser" render={ props => (<Authenticated component={DeleteUser} {...props}/>)} />
             </div>
         </Router>
     </Provider>

@@ -7,6 +7,9 @@ ENV NPM_CONFIG_LOGLEVEL warn
 
 # Install and configure `serve`.
 RUN npm install -g express
+RUN npm install -g babel-cli
+RUN npm install -g babel-preset-es2015
+RUN npm install -g babel-preset-stage-2
 CMD  babel-node server.js --presets es2015,stage-2
 EXPOSE 3000
 
