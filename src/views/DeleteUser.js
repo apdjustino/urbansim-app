@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import {connect} from 'react-redux'
 import DeleteUser from '../components/DeleteUser';
+import Denied from './Denied';
 import * as userActions from '../actions/users/users';
 
 class DeleteUserPage extends React.Component {
@@ -21,8 +22,8 @@ class DeleteUserPage extends React.Component {
     }
 
     render(){
-        return (
-            <div>
+        return (this.props.isAdmin ? 
+            (<div>
                 <Container>
                     <Row>
                         <Col md={6}>
@@ -30,7 +31,7 @@ class DeleteUserPage extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </div>) : <Denied />
         )
 
     }
@@ -39,7 +40,7 @@ class DeleteUserPage extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-
+        isAdmin: state.users.isAdmin
     }
 };
 

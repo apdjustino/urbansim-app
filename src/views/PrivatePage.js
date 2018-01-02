@@ -26,7 +26,8 @@ const PrivatePage = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        email: state.users.email
+        email: state.users.email,
+        isAdmin: state.users.isAdmin
     }
 };
 

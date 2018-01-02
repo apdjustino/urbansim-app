@@ -5,6 +5,7 @@ import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import {connect} from 'react-redux'
 import RegisterUser from '../components/RegisterUser';
+import Denied from './Denied';
 import * as userActions from '../actions/users/users';
 
 
@@ -20,8 +21,8 @@ class RegisterPage extends React.Component {
     }
     
     render(){
-        return (
-            <div>
+        return (this.props.isAdmin ?
+        (<div>
                 <Container>
                     <Row>
                         <Col md={6}>
@@ -29,7 +30,7 @@ class RegisterPage extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </div>) :<Denied/>
         )
         
     }
@@ -38,7 +39,7 @@ class RegisterPage extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        
+        isAdmin: state.users.isAdmin
     }
 };
 

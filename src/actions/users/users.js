@@ -269,7 +269,7 @@ export const submitPasswordReset = (email) => {
 export const resetPassword = (token, password1, password2) => {
     return (dispatch) => {
         let data = {};
-        const regex = new RegExp("^([a-zA-Z0-9@*#]{8,25})$")
+        const regex = new RegExp("^([a-zA-Z0-9@*#]{8,25})$");
         if(password1 == password2){
             data = {token: token, password: password1}
         }else{
@@ -288,6 +288,7 @@ export const resetPassword = (token, password1, password2) => {
                     statusText: "Password must consists of at least 8 characters and not more than 15 characters and not use any special characters."
                 }
             }));
+            return;
         }
         return makeUserRequest("post", data, "/api/passwordreset")
             .then(response => {

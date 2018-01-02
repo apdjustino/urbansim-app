@@ -143,7 +143,7 @@ app.post('/api/passwordrequest', (req, res, next) => {
         if(user){
             const token = jwt.sign({email: email}, secrets.jwt_secret);
             const transporter = nodemailer.createTransport({
-                host: "smtp.office365.com",
+                host: secrets.smtp_host,
                 port: 587,
                 secure: false,
                 auth: {

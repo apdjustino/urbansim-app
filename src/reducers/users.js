@@ -28,7 +28,7 @@ const users = (state = {
         case types.IS_AUTHENTICATED:
             return Object.assign({}, state, {authenticated: action.payload.authenticated, isAdmin: action.payload.isAdmin});
         case types.LOGOUT_USER:
-            return Object.assign({}, state, {authenticated: false});
+            return Object.assign({}, state, {authenticated: false, isAdmin: false});
         case types.TOGGLE_PASSWORD_RESET:
             return Object.assign({}, state, {isReset: action.payload.isReset});
         case types.SUBMIT_PASSWORD_RESET_FAIL:

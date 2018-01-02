@@ -7,6 +7,7 @@ import {Container, Row, Col} from 'reactstrap';
 import {connect} from 'react-redux'
 import UpdateUserRole from '../components/UpdateUserRole';
 import * as userActions from '../actions/users/users';
+import Denied from './Denied';
 
 class UpdateUserRolePage extends React.Component {
     constructor(props){
@@ -22,8 +23,8 @@ class UpdateUserRolePage extends React.Component {
     }
 
     render(){
-        return (
-            <div>
+        return (this.props.isAdmin ? 
+            (<div>
                 <Container>
                     <Row>
                         <Col md={6}>
@@ -31,7 +32,7 @@ class UpdateUserRolePage extends React.Component {
                         </Col>
                     </Row>
                 </Container>
-            </div>
+            </div>) : <Denied />
         )
 
     }
@@ -40,7 +41,7 @@ class UpdateUserRolePage extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-
+        isAdmin: state.users.isAdmin
     }
 };
 
