@@ -9,6 +9,7 @@ import ResetPassword from './views/ResetPassword';
 import RegisterPage from './views/RegisterPage';
 import UpdateUserRolePage from './views/UpdateUserRolePage';
 import DeleteUser from './views/DeleteUser'
+import ModelConfigPage from './views/ModelConfigPage';
 
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -24,6 +25,7 @@ const App = ({store}) => (
                 <Route exact path="/register" render={ props => (<Authenticated component={RegisterPage} {...props}/>)} />
                 <Route exact path="/updaterole" render={ props => (<Authenticated component={UpdateUserRolePage} {...props}/>)} />
                 <Route exact path="/deleteuser" render={ props => (<Authenticated component={DeleteUser} {...props}/>)} />
+                <Route exact path="/modelconfig" component={ModelConfigPage} />
             </div>
         </Router>
     </Provider>
