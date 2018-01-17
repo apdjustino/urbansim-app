@@ -105,20 +105,26 @@ const selector = formValueSelector('ModelConfigForm');
 const mapStateToProps = (state) => {
     return {
         modelOptions: [
-            {value: "model1", name: "Model 1"},
-            {value: "model2", name: "Model 2"},
-            {value: "model3", name: "Model 3"},
+            {value: "price_growth", name: "Price Growth"},
+            {value: "establishment_transition", name: "Establishment Transition"},
+            {value: "household_transition", name: "Household Transition"},
+            {value: "feasibility", name: "Parcel Feasibility"},
+            {value: "non_res_developer", name: "Non-Residential Developer"},
+            {value: "res_developer", name: "Residential Developer"},
+            {value: "establishment_simulation", name: "Establishment Simulation"},
+            {value: "household_simulation", name: "Household Simulation"}
+
         ],
         selectedModel: selector(state, 'model-select'),
         years: [...Array(2041).keys()].slice(2010).map((year) => ({name: year, value: year})),
         selectedYears: selector(state, 'year-select'),
-        forecasts: [{value: "forecast1", name: "forecast 1"}, {value: "forecast2", name: "forecast 2"}],
+        forecasts: [{value: "forecast1", name: "forecast 1"}],
         selectedForecast: selector(state, 'forecast-select'),
-        population: [{value: "population1", name: "population 1"}, {value: "population2", name: "population 2"}],
+        population: [{value: "population1", name: "population 1"}],
         selectedPopulation: selector(state, 'population-select'),
-        zoning: [{value: "zoning1", name: "zoning 1"}, {value: "zoning", name: "zoning 2"}],
+        zoning: [{value: "zoning1", name: "zoning 1"}],
         selectedZoning: selector(state, 'zoning-select'),
-        pricing: [{value: "pricing1", name: "pricing 1"}, {value: "pricing", name: "pricing 2"}],
+        pricing: [{value: "pricing1", name: "pricing 1"}],
         selectedPricing: selector(state, 'pricing-select'),
         
     };
