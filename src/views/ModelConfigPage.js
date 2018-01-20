@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import ModelConfig from '../components/ModelConfig';
 import ModelRunning from '../components/ModelRunning';
 import * as model_config from '../actions/model-config/model-config';
+import io from 'socket.io-client';
 import Denied from './Denied';
 
 
@@ -15,6 +16,10 @@ class ModelConfigPage extends React.Component {
     
     constructor(props){
         super(props);
+    }
+
+    componentDidMount(){
+        
     }
     
     handleSubmit(values){
