@@ -2,8 +2,9 @@
  * Created by jmartinez on 1/13/18.
  */
 import React, {Component} from 'react'
-import {subscribeToTimer} from '../actions/model-config/model-config';
+import * as model_config from '../actions/model-config/model-config';
 import io from 'socket.io-client';
+import {connect} from 'react-redux';
 
 class ModelRunningPage extends React.Component {
 

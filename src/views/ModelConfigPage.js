@@ -5,7 +5,10 @@ import React, {Component} from 'react';
 import {Container, Row, Col} from 'reactstrap';
 import {connect} from 'react-redux'
 import ModelConfig from '../components/ModelConfig';
+import ModelRunning from '../components/ModelRunning';
+import * as model_config from '../actions/model-config/model-config';
 import Denied from './Denied';
+
 
 
 class ModelConfigPage extends React.Component {
@@ -15,7 +18,7 @@ class ModelConfigPage extends React.Component {
     }
     
     handleSubmit(values){
-        console.log(values);
+        this.props.submitModel(values);
     }
     
     render(){
@@ -23,8 +26,11 @@ class ModelConfigPage extends React.Component {
             <div>
                 <Container>
                     <Row>
-                        <Col md={12}>
+                        <Col md={6}>
                             <ModelConfig onSubmit={(values) => {this.handleSubmit(values)}} />
+                        </Col>
+                        <Col md={6}>
+                            <ModelRunning />
                         </Col>
                     </Row>
                 </Container>
@@ -39,4 +45,4 @@ const mapStateToProps = (state) => {
     return {};
 }
 
-export default connect(mapStateToProps)(ModelConfigPage);
+export default connect(mapStateToProps, model_config)(ModelConfigPage);
