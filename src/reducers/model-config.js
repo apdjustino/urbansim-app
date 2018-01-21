@@ -11,6 +11,8 @@ const model_config = (state = {
     isValid: null,
     formFeedBack: null,
     yearsRunning: [],
+    modalOpen: true,
+    resourceStatus: null,
     model2015: null,
     model2016: null,
     model2017: null,
@@ -50,6 +52,10 @@ const model_config = (state = {
             return Object.assign({}, state, action.payload.obj);
         case types.FORM_ERROR:
             return Object.assign({}, state, {formFeedBack: action.payload.statusText, isValid: false});
+        case types.SUBMIT_EC2_SUCCESS:
+            return Object.assign({}, state, {modalOpen: false});
+        case types.UPDATE_RESOURCE_STATUS:
+            return Object.assign({}, state, {resourceStatus: `Status: ${action.payload.statusText}`});
         default:
             return state
     }

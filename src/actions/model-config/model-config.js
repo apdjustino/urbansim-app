@@ -6,15 +6,6 @@ import * as types from './constants';
 import history from '../../config/history';
 import axios from 'axios';
 
-const socket = io('http://localhost:5000/api/datetime');
-
-export function subscribeToTimer(){
-
-    socket.emit('subscribeToTime');
-    socket.on('timer', function(x){ console.log(x);});
-}
-
-
 export const submitModelConfigSuccess = (res) => {
     return {
         type: types.SUBMIT_MODEL_CONFIG_SUCCESS,
@@ -67,7 +58,52 @@ export const formError = (res) => {
             statusText: res.response.statusText
         }
     }
-}
+};
+
+export const updateResourceStatus = (res) => {
+    return {
+        type: types.UPDATE_RESOURCE_STATUS,
+        payload: {
+            status: res.response.status,
+            statusText: res.response.statusText
+        }
+    }
+};
+
+export const submitEC2Success = () => {
+    return {
+        type: types.SUBMIT_EC2_SUCCESS,
+    }
+};
+
+export const submitEC2Request = (token) => {
+    return function(dispatch){
+        const socket = io('http://localhost:5000/flask/api/resources', {
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: Infinity
+        });
+
+        socket.on('resource_status', (msg) => {
+            dispatch(updateResourceStatus({
+                response: {
+                    status: 200,
+                    statusText: msg
+                }
+            }));
+            if(msg == 'Resources Ready'){
+                setTimeout(function(){
+                    dispatch(submitEC2Success());
+                }, 1000)
+            }
+        });
+
+        socket.emit('get_resources', token)
+
+
+    }
+};
 
 export const submitModel = (values) => {
     return function(dispatch){
