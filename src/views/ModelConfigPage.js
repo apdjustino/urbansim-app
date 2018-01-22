@@ -17,11 +17,12 @@ class ModelConfigPage extends React.Component {
     
     constructor(props){
         super(props);
-    }
 
-    componentDidMount(){
+        const token = localStorage.getItem('token');
+        this.props.hasResources(token);
         
     }
+    
     
     handleSubmit(values){
         this.props.submitModel(values);
@@ -33,13 +34,31 @@ class ModelConfigPage extends React.Component {
 
     handleProvision(){
         const token = localStorage.getItem('token');
-        this.props.submitEC2Request(token)
+        if(this.props.noResources){
+            this.props.submitEC2Request(token)
+        }else{
+            this.props.closeModal()
+        }
+
+    }
+
+    handleTerminate(){
+        const token = localStorage.getItem('token');
+        this.props.shutDownResources(token);
+        history.push('/private');
     }
     
     render(){
+        const resourceText = "This account currently has AWS resources provisioned for UrbanSim. Resources stay active for 1 hour after they are provisioned. If the AWS resources expire during your modeling session, re-load this page and re-provision new resources."
+        const noResourceText = "UrbanSim requires cloud resources to run the model. There are no resources allocated for this user. Each user will be able to use AWS resources to run the UrbanSim model. AWS resources will be able to run up to 30 years of model simulations simultaneously. To provision the resources, please click on the start button. Each user's resources will stay active for one hour. After an hour, users will need to re-provision resources."
         return (
             <div>
                 <Container>
+                    <Row>
+                        <Col md={6}>
+                            <Button color="primary" onClick={() => {this.handleTerminate()}}>Shut down AWS resources</Button>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col md={6}>
                             <ModelConfig onSubmit={(values) => {this.handleSubmit(values)}} />
@@ -53,16 +72,13 @@ class ModelConfigPage extends React.Component {
                     <ModalHeader>Provision Model Resources</ModalHeader>
                     <ModalBody>
                         <p>
-                            UrbanSim requires cloud resources to run the model. There are no resources allocated for
-                            this user. Each user will be able to use AWS resources to run the UrbanSim model. AWS
-                            resources will be able to run up to 30 years of model simulations simultaneously. To
-                            provision the resources, please click on the start button. Each user's resources will
-                            stay active for one hour. After an hour, users will need to re-provision resources.
+                            {(this.props.noResources) ? noResourceText : resourceText}
+                            
                         </p>
                         <p>{this.props.resourceStatus}</p>
                     </ModalBody>
                     <ModalFooter>
-                        <Button color="primary" onClick={() => {this.handleProvision()}}>Get Resources</Button>
+                        <Button color="primary" onClick={() => {this.handleProvision()}}>{this.props.noResources ? "Get Resources" : "Continue"}</Button>
                         <Button color="danger" onClick={() => {this.handleCancel()}}>Cancel</Button>
                     </ModalFooter>
                 </Modal>
@@ -76,8 +92,10 @@ class ModelConfigPage extends React.Component {
 const mapStateToProps = (state) => {
     return {
         modalOpen: state.model_config.modalOpen,
-        resourceStatus: state.model_config.resourceStatus
+        resourceStatus: state.model_config.resourceStatus,
+        noResources: state.model_config.noResources
     };
-}
+};
+
 
 export default connect(mapStateToProps, model_config)(ModelConfigPage);

@@ -15,6 +15,7 @@ const PrivatePage = (props) => {
                 <h5>User: {props.email}</h5>
             </Jumbotron>
             <Button color="primary" onClick={() => {props.logOutUser()}}>Log Out</Button> {' '}
+            <Button color="primary" href="/modelconfig">Run Model</Button> {' '}
             {(props.isAdmin ? <Button href="/register" color="primary">Add New User</Button> : <div></div>)} {' '}
             {(props.isAdmin ? <Button href="/updaterole" color="primary">Change User Role</Button> : <div></div>)} {' '}
             {(props.isAdmin ? <Button href="/deleteuser" color="primary">Delete User</Button> : <div></div>)} {' '}

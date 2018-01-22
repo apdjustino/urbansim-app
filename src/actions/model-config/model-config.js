@@ -70,11 +70,44 @@ export const updateResourceStatus = (res) => {
     }
 };
 
+export const updateNoResources = (res) => {
+    return {
+        type: types.UPDATE_NO_RESOURCES,
+        payload: {
+            no_resources: res
+        }
+    }
+};
+
 export const submitEC2Success = () => {
     return {
         type: types.SUBMIT_EC2_SUCCESS,
     }
 };
+
+export const closeModal = () => {
+    return function(dispatch){
+        dispatch(submitEC2Success())
+    }
+};
+
+
+export const hasResources = (token) => {
+    return function(dispatch){
+        const socket = io('http://localhost:5000/flask/api/checkresources', {
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: Infinity
+        });
+
+        socket.on('no_resources', (msg) => {
+            dispatch(updateNoResources(msg));
+        });
+
+        socket.emit('check_resources', token)
+    }
+} ;
 
 export const submitEC2Request = (token) => {
     return function(dispatch){
@@ -375,3 +408,16 @@ export const submitModel = (values) => {
     }
 };
 
+export const shutDownResources = (token) => {
+    return function(dispatch){
+        const socket = io('http://localhost:5000/flask/api/terminate', {
+            reconnection: true,
+            reconnectionDelay: 1000,
+            reconnectionDelayMax : 5000,
+            reconnectionAttempts: Infinity
+        });
+
+        socket.emit('terminate_instances', token)
+    }
+
+}

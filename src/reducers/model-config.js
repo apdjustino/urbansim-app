@@ -13,6 +13,7 @@ const model_config = (state = {
     yearsRunning: [],
     modalOpen: true,
     resourceStatus: null,
+    noResources: null,
     model2015: null,
     model2016: null,
     model2017: null,
@@ -56,6 +57,10 @@ const model_config = (state = {
             return Object.assign({}, state, {modalOpen: false});
         case types.UPDATE_RESOURCE_STATUS:
             return Object.assign({}, state, {resourceStatus: `Status: ${action.payload.statusText}`});
+        case types.UPDATE_NO_RESOURCES:
+            return Object.assign({}, state, {noResources: action.payload.no_resources});
+        case types.CLOSE_MODAL:
+            return Object.assign({}, state, {modalOpen: false});
         default:
             return state
     }
