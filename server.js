@@ -8,7 +8,7 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt-nodejs';
 import User from './src/server/user';
-import secrets from './src/server/secrets';
+import secrets from './src/server/secrets_new';
 import nodemailer from 'nodemailer';
 import {pick} from 'lodash';
 
